@@ -1,9 +1,8 @@
 import express from "express";
+import { getHomePage } from "../controller/homeController";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  res.send("check Abc");
-});
+router.get("/", getHomePage);
 
 module.exports = router;
