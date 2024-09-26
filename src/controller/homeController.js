@@ -1,5 +1,4 @@
-import connection from "../configs/config.mysql";
-
+import { createNewUser } from "../services/userService";
 const getHomePage = (req, res) => {
   return res.render("home.ejs");
 };
@@ -8,11 +7,7 @@ const getCreateUserPage = (req, res) => {
 };
 const postCreateUser = async (req, res) => {
   const { username, email, password } = req.body;
-  const [results, fields] = await connection.query(
-    "INSERT INTO users (username, email, password) values (?, ?, ?)",
-    [username, email, password]
-  );
-  console.log(results);
+  await createNewUser(username, email, password);
   res.send("Success");
 };
 module.exports = {
