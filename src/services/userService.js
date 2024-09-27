@@ -32,13 +32,25 @@ const createNewUser = async (username, email, password) => {
 const getListUser = async () => {
   try {
     const [results, fields] = await connection.query("SELECT * FROM users");
-    console.log(">>> CHECK RES", results);
+    console.log(">>> CHECK get list user", results);
     return results;
   } catch (error) {
-    console.error("Error creating new user:", error);
+    console.error("Error getting list of users:", error);
+  }
+};
+const deleteUser = async (id) => {
+  try {
+    const [results, fields] = await connection.query(
+      "DELETE FROM users where id = ?",
+      [id]
+    );
+    console.log(">>> CHECK delete user", results);
+  } catch (error) {
+    console.error("Error deleting user:", error);
   }
 };
 module.exports = {
   createNewUser,
   getListUser,
+  deleteUser,
 };
