@@ -1,13 +1,13 @@
 import express from "express";
 import {
   getHomePage,
-  getCreateUserPage,
+  getUserPage,
   postCreateUser,
 } from "../controller/homeController";
 
 const router = express.Router();
 
 router.get("/", getHomePage);
-router.get("/user", getCreateUserPage);
+router.get("/user", getUserPage);
 router.post("/user/create-user", postCreateUser);
 module.exports = router;

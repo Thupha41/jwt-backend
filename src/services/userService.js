@@ -29,7 +29,16 @@ const createNewUser = async (username, email, password) => {
     console.error("Error creating new user:", error);
   }
 };
-
+const getListUser = async () => {
+  try {
+    const [results, fields] = await connection.query("SELECT * FROM users");
+    console.log(">>> CHECK RES", results);
+    return results;
+  } catch (error) {
+    console.error("Error creating new user:", error);
+  }
+};
 module.exports = {
   createNewUser,
+  getListUser,
 };
