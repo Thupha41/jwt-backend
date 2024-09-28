@@ -29,6 +29,8 @@ const createNewUser = async (username, email, password) => {
     console.error("Error creating new user:", error);
   }
 };
+
+//get list of users
 const getListUser = async () => {
   try {
     const [results, fields] = await connection.query("SELECT * FROM users");
@@ -38,6 +40,8 @@ const getListUser = async () => {
     console.error("Error getting list of users:", error);
   }
 };
+
+//delete user
 const deleteUser = async (id) => {
   try {
     const [results, fields] = await connection.query(
@@ -49,8 +53,34 @@ const deleteUser = async (id) => {
     console.error("Error deleting user:", error);
   }
 };
+
+//update user
+const getUserById = async (id) => {
+  try {
+    const [results, fields] = await connection.query(
+      "SELECT * FROM users WHERE id = ?",
+      [id]
+    );
+    return results;
+  } catch (error) {
+    console.error("Error getting user by id", error);
+  }
+};
+const editUser = async (email, username, id) => {
+  try {
+    const [results, fields] = await connection.query(
+      "UPDATE users SET email = ?, username = ? WHERE id = ?",
+      [email, username, id]
+    );
+    console.log(results);
+  } catch (error) {
+    console.error("Error editing user", error);
+  }
+};
 module.exports = {
   createNewUser,
   getListUser,
   deleteUser,
+  getUserById,
+  editUser,
 };
