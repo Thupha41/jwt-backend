@@ -14,9 +14,9 @@ const getUserPage = async (req, res) => {
   return res.render("user.ejs", { listUser: users });
 };
 const postCreateUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { email, password, username } = req.body;
 
-  await createNewUser(username, email, password);
+  await createNewUser(email, password, username);
   return res.redirect("/user");
 };
 const handleDeleteUser = async (req, res) => {

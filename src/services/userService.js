@@ -1,4 +1,4 @@
-import connection from "../configs/config.mysql";
+import { sequelize } from "../configs/config.mysql";
 import bcrypt from "bcryptjs";
 
 // Configurable salt rounds
@@ -17,12 +17,15 @@ const hashPassword = async (userPassword) => {
 };
 
 // Creates a new user in the database
-const createNewUser = async (username, email, password) => {
+const createNewUser = async (email, password, username) => {
   try {
     const hashPass = await hashPassword(password);
-    const [results, fields] = await connection.query(
-      "INSERT INTO users (username, email, password) values (?, ?, ?)",
-      [username, email, hashPass]
+    const [results, fields] = await sequelize.query(
+      "INSERT INTO Users (email, password, username) values (?, ?, ?)",
+      {
+        replacements: [email, hashPass, username],
+        type: sequelize.QueryTypes.INSERT,
+      }
     );
     console.log(results);
   } catch (error) {
@@ -33,7 +36,7 @@ const createNewUser = async (username, email, password) => {
 //get list of users
 const getListUser = async () => {
   try {
-    const [results, fields] = await connection.query("SELECT * FROM users");
+    const [results, fields] = await sequelize.query("SELECT * FROM Users");
     console.log(">>> CHECK get list user", results);
     return results;
   } catch (error) {
@@ -44,8 +47,8 @@ const getListUser = async () => {
 //delete user
 const deleteUser = async (id) => {
   try {
-    const [results, fields] = await connection.query(
-      "DELETE FROM users where id = ?",
+    const [results, fields] = await sequelize.query(
+      "DELETE FROM Users where id = ?",
       [id]
     );
     console.log(">>> CHECK delete user", results);
@@ -57,8 +60,8 @@ const deleteUser = async (id) => {
 //update user
 const getUserById = async (id) => {
   try {
-    const [results, fields] = await connection.query(
-      "SELECT * FROM users WHERE id = ?",
+    const [results, fields] = await sequelize.query(
+      "SELECT * FROM Users WHERE id = ?",
       [id]
     );
     return results;
@@ -68,8 +71,8 @@ const getUserById = async (id) => {
 };
 const editUser = async (email, username, id) => {
   try {
-    const [results, fields] = await connection.query(
-      "UPDATE users SET email = ?, username = ? WHERE id = ?",
+    const [results, fields] = await sequelize.query(
+      "UPDATE Users SET email = ?, username = ? WHERE id = ?",
       [email, username, id]
     );
     console.log(results);
