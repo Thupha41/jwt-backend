@@ -15,7 +15,7 @@ module.exports = {
     //Tham số đầu tiên truyền vào là tên table muốn tham chiếu tới
     // bulkInsert allow us to insert multiple rows in tables
     await queryInterface.bulkInsert(
-      "Users",
+      "User",
       [
         {
           email: "John Doe",

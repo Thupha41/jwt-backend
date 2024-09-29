@@ -21,7 +21,7 @@ const createNewUser = async (email, password, username) => {
   try {
     const hashPass = await hashPassword(password);
     const [results, fields] = await sequelize.query(
-      "INSERT INTO Users (email, password, username) values (?, ?, ?)",
+      "INSERT INTO User (email, password, username) values (?, ?, ?)",
       {
         replacements: [email, hashPass, username],
         type: sequelize.QueryTypes.INSERT,
@@ -33,14 +33,14 @@ const createNewUser = async (email, password, username) => {
   }
 };
 
-//get list of users
+//get list of user
 const getListUser = async () => {
   try {
-    const [results, fields] = await sequelize.query("SELECT * FROM Users");
+    const [results, fields] = await sequelize.query("SELECT * FROM User");
     console.log(">>> CHECK get list user", results);
     return results;
   } catch (error) {
-    console.error("Error getting list of users:", error);
+    console.error("Error getting list of user:", error);
   }
 };
 
@@ -48,7 +48,7 @@ const getListUser = async () => {
 const deleteUser = async (id) => {
   try {
     const [results, fields] = await sequelize.query(
-      "DELETE FROM Users where id = ?",
+      "DELETE FROM User where id = ?",
       [id]
     );
     console.log(">>> CHECK delete user", results);
@@ -61,7 +61,7 @@ const deleteUser = async (id) => {
 const getUserById = async (id) => {
   try {
     const [results, fields] = await sequelize.query(
-      "SELECT * FROM Users WHERE id = ?",
+      "SELECT * FROM User WHERE id = ?",
       [id]
     );
     return results;
@@ -72,7 +72,7 @@ const getUserById = async (id) => {
 const editUser = async (email, username, id) => {
   try {
     const [results, fields] = await sequelize.query(
-      "UPDATE Users SET email = ?, username = ? WHERE id = ?",
+      "UPDATE User SET email = ?, username = ? WHERE id = ?",
       [email, username, id]
     );
     console.log(results);

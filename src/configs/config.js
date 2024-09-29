@@ -8,6 +8,9 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "mysql",
+    define: {
+      freezeTableName: true,
+    },
   },
   test: {
     username: "root",
@@ -23,5 +26,8 @@ module.exports = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: "mysql",
+    define: {
+      freezeTableName: true,
+    },
   },
 };
