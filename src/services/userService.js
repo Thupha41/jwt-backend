@@ -1,3 +1,4 @@
+import { where } from "sequelize/lib/sequelize";
 import { sequelize } from "../configs/config.mysql";
 import db from "../models/index";
 import bcrypt from "bcryptjs";
@@ -35,46 +36,73 @@ const createNewUser = async (email, password, username) => {
 //get list of user
 const getListUser = async () => {
   try {
-    const [results, fields] = await sequelize.query("SELECT * FROM User");
-    console.log(">>> CHECK get list user", results);
-    return results;
+    // const [results, fields] = await sequelize.query("SELECT * FROM User");
+    // console.log(">>> CHECK get list user", results);
+    // return results;
+    let users = [];
+    users = await db.User.findAll();
+    return users;
   } catch (error) {
     console.error("Error getting list of user:", error);
   }
 };
 
 //delete user
-const deleteUser = async (id) => {
+const deleteUser = async (userId) => {
   try {
-    const [results, fields] = await sequelize.query(
-      "DELETE FROM User where id = ?",
-      [id]
-    );
-    console.log(">>> CHECK delete user", results);
+    // const [results, fields] = await sequelize.query(
+    //   "DELETE FROM User where id = ?",
+    //   [id]
+    // );
+    // console.log(">>> CHECK delete user", results);
+    await db.User.destroy({
+      where: {
+        id: userId,
+      },
+    });
   } catch (error) {
     console.error("Error deleting user:", error);
   }
 };
 
 //update user
-const getUserById = async (id) => {
+const getUserById = async (userId) => {
   try {
-    const [results, fields] = await sequelize.query(
-      "SELECT * FROM User WHERE id = ?",
-      [id]
-    );
-    return results;
+    // const [results, fields] = await sequelize.query(
+    //   "SELECT * FROM User WHERE id = ?",
+    //   [id]
+    // );
+    // return results;
+    let userById = {};
+    userById = await db.User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    console.log(">> CHECK USER FIND ONE", userById, ">>>> CHECK ID", userId);
+    return userById;
   } catch (error) {
     console.error("Error getting user by id", error);
   }
 };
 const editUser = async (email, username, id) => {
   try {
-    const [results, fields] = await sequelize.query(
-      "UPDATE User SET email = ?, username = ? WHERE id = ?",
-      [email, username, id]
+    // const [results, fields] = await sequelize.query(
+    //   "UPDATE User SET email = ?, username = ? WHERE id = ?",
+    //   [email, username, id]
+    // );
+    // console.log(results);
+    await db.User.update(
+      {
+        email: email,
+        username: username,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
     );
-    console.log(results);
   } catch (error) {
     console.error("Error editing user", error);
   }

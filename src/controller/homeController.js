@@ -32,10 +32,8 @@ const getEditUserPage = async (req, res) => {
   let id = req.params.id;
   let userData = {};
   let user = await getUserById(id);
-  if (user && user.length > 0) {
-    userData = user[0];
-  }
-  console.log("check user data ", userData);
+  userData = user;
+
   return res.render("user-edit.ejs", { userData });
 };
 
