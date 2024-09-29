@@ -1,4 +1,5 @@
 import { sequelize } from "../configs/config.mysql";
+import db from "../models/index";
 import bcrypt from "bcryptjs";
 
 // Configurable salt rounds
@@ -20,14 +21,12 @@ const hashPassword = async (userPassword) => {
 const createNewUser = async (email, password, username) => {
   try {
     const hashPass = await hashPassword(password);
-    const [results, fields] = await sequelize.query(
-      "INSERT INTO User (email, password, username) values (?, ?, ?)",
-      {
-        replacements: [email, hashPass, username],
-        type: sequelize.QueryTypes.INSERT,
-      }
-    );
-    console.log(results);
+    const user = await db.User.create({
+      email: email,
+      password: hashPass,
+      username: username,
+    });
+    return user;
   } catch (error) {
     console.error("Error creating new user:", error);
   }
