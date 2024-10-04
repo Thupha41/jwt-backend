@@ -9,31 +9,24 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       email: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       password: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       username: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       address: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
       sex: {
-        allowNull: false,
         type: Sequelize.STRING,
       },
-      phone_number: {
-        allowNull: true,
+      phone: {
         type: Sequelize.STRING,
       },
-      role_id: {
-        allowNull: false,
+      roleId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {
@@ -47,11 +40,6 @@ module.exports = {
         defaultValue: Sequelize.literal(
           "CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
         ),
-      },
-      deletedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
     });
   },

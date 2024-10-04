@@ -14,10 +14,10 @@ module.exports = {
       description: {
         type: Sequelize.STRING,
       },
-      start_date: {
+      startDate: {
         type: Sequelize.STRING,
       },
-      customer_id: {
+      customerId: {
         type: Sequelize.INTEGER,
       },
       createdAt: {

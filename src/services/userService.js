@@ -35,12 +35,55 @@ const createNewUser = async (email, password, username) => {
 
 //get list of user
 const getListUser = async () => {
+  let userById = await db.User.findOne({
+    // include: [
+    //   {
+    //     model: db.Role,
+    //     // through: {
+    //     //   attributes: ["name", "description"],
+    //     // },
+    //     attributes: ["name", "description"],
+    //   },
+    // ],
+    include: {
+      model: db.Role,
+      attributes: ["name", "description"],
+    },
+    attributes: ["id", "username", "email"],
+    where: { id: 1 },
+    raw: true,
+    nest: true,
+  });
+  let roles1 = await db.Role.findAll({
+    where: {
+      id: 1,
+    },
+    include: [
+      {
+        model: db.Permission,
+      },
+    ],
+    raw: true,
+    nest: true,
+  });
+  let roles = await db.Permission.findAll({
+    include: { model: db.Role, where: { id: 1 } },
+    raw: true,
+    nest: true,
+  });
+
+  console.log(">>> check new user", userById);
+  console.log(">>> check roles1", roles1);
+  console.log(">>> check roles", roles);
   try {
     // const [results, fields] = await sequelize.query("SELECT * FROM User");
     // console.log(">>> CHECK get list user", results);
     // return results;
     let users = [];
-    users = await db.User.findAll();
+    users = await db.User.findAll({
+      raw: true,
+    });
+    console.log("Check User", users);
     return users;
   } catch (error) {
     console.error("Error getting list of user:", error);
