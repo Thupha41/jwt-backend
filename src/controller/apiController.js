@@ -31,7 +31,7 @@ const handleRegister = async (req, res) => {
     return res.status(200).json({
       EM: data.EM, // error or success message
       EC: data.EC, // Error code
-      DT: "", // data
+      DT: data.DT, // data
     });
   } catch (error) {
     console.error("Error in handleRegister:", error);
@@ -43,7 +43,33 @@ const handleRegister = async (req, res) => {
   }
 };
 
+const handleLogin = async (req, res) => {
+  try {
+    let data = await AuthService.login(req.body);
+    if (data && +data.EC !== 1) {
+      return res.status(401).json({
+        EM: data.EM,
+        EC: data.EC,
+        DT: data.DT,
+      });
+    }
+    return res.status(200).json({
+      EM: data.EM,
+      EC: data.EC,
+      DT: data.DT,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      EM: "Error message from server", // error message
+      EC: "-1", // Error code
+      DT: "", // data
+    });
+  }
+};
+
 module.exports = {
   testApi,
   handleRegister,
+  handleLogin,
 };

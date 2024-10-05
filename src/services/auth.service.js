@@ -54,6 +54,10 @@ const checkUserExists = async (userEmail, userPhone) => {
   return user;
 };
 
+const checkPassword = (inputPassword, hashPassword) => {
+  return bcrypt.compareSync(inputPassword, hashPassword);
+};
+
 class AuthService {
   static register = async (rawUserData) => {
     try {
@@ -99,6 +103,38 @@ class AuthService {
       return {
         EM: "A user create successfully!",
         EC: 1,
+        DT: "",
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        EM: "Something wrong with user service!",
+        EC: -1,
+      };
+    }
+  };
+
+  static login = async (rawUserData) => {
+    try {
+      //Step1: Check if emal or phone exist
+      let user = await checkUserExists(
+        rawUserData.valueLogin,
+        rawUserData.valueLogin
+      );
+      console.log(">>> check user", user);
+      if (user) {
+        let checkPw = checkPassword(rawUserData.password, user.password);
+        if (checkPw) {
+          return {
+            EM: "Login successfully",
+            EC: 1,
+          };
+        }
+      }
+      console.log(">>> Not found user with email/phone");
+      return {
+        EM: "Your email/phone or password is incorrect",
+        EC: 0,
       };
     } catch (error) {
       console.log(error);
