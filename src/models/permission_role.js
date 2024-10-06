@@ -17,8 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       permissionId: DataTypes.INTEGER,
     },
     {
-      sequelize,
+      sequelize: sequelize,
       modelName: "Permission_Role",
+      freezeTableName: true,
+      tableName: "Permission_Role",
     }
   );
   return Permission_Role;

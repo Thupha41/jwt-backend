@@ -6,7 +6,7 @@ WORKDIR /jwt/backend
 
 #Copy all file package.json in local and push into Docker
 COPY package*.json ./
-
+RUN apk add --no-cache curl
 RUN npm install
 
 RUN npm install -g @babel/core @babel/cli
@@ -17,7 +17,7 @@ COPY . .
 RUN npm run build-src
 
 # Finally, run the command
-CMD [ "npm", "run", "build"]
+CMD ["npm", "run", "build"]
 
 #docker build --tag node-jwt-docker .
 #docker run -p 8080:8080 -d node-jwt-docker

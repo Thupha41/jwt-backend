@@ -17,8 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
     },
     {
-      sequelize,
+      sequelize: sequelize,
       modelName: "Project_User",
+      freezeTableName: true,
+      tableName: "Project_User",
     }
   );
   return Project_User;

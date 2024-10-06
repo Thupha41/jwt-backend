@@ -20,8 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
     },
     {
-      sequelize,
+      sequelize: sequelize,
       modelName: "Permission",
+      freezeTableName: true,
+      tableName: "Permission",
     }
   );
   return Permission;

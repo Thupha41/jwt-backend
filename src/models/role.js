@@ -21,8 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.STRING,
     },
     {
-      sequelize,
+      sequelize: sequelize,
       modelName: "Role",
+      freezeTableName: true,
+      tableName: "Role",
     }
   );
   return Role;

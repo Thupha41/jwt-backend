@@ -22,8 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       customerId: DataTypes.INTEGER,
     },
     {
-      sequelize,
+      sequelize: sequelize,
       modelName: "Project",
+      freezeTableName: true,
+      tableName: "Project",
     }
   );
   return Project;

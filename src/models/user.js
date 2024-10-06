@@ -26,8 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       roleId: DataTypes.INTEGER,
     },
     {
-      sequelize,
+      sequelize: sequelize,
       modelName: "User",
+      freezeTableName: true,
+      tableName: "User",
     }
   );
   return User;
