@@ -1,5 +1,6 @@
-require("dotenv").config();
+"use strict";
 
+require("dotenv").config();
 module.exports = {
   development: {
     username: process.env.DB_USER,
@@ -9,15 +10,15 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
     define: {
-      freezeTableName: true,
-    },
+      freezeTableName: true
+    }
   },
   test: {
     username: "root",
     password: null,
     database: "database_test",
     host: "127.0.0.1",
-    dialect: "mysql",
+    dialect: "mysql"
   },
   production: {
     username: process.env.DB_USER,
@@ -27,7 +28,7 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
     define: {
-      freezeTableName: true,
-    },
-  },
+      freezeTableName: true
+    }
+  }
 };

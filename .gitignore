@@ -1,3 +1,11 @@
+# Node modules
 node_modules
+
+# Environment variables
 .env
 docker-compose.yml
+
+# Logs
+logs
+*.log
+npm-debug.log*
