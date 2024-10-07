@@ -22,6 +22,6 @@ app.use("/", webRoutes);
 // Khai bao api route
 initApiRoute(app);
 
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, hostname, () => {
   console.log(`Example app listening on port ${port}`);
 });

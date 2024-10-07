@@ -116,7 +116,6 @@ class AuthService {
 
   static login = async (rawUserData) => {
     try {
-      //Step1: Check if emal or phone exist
       let user = await checkUserExists(
         rawUserData.valueLogin,
         rawUserData.valueLogin

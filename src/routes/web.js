@@ -7,7 +7,7 @@ import {
   getEditUserPage,
   handleEditUser,
 } from "../controller/homeController";
-import { testApi } from "../controller/apiController";
+import { testApi } from "../controller/authController";
 const router = express.Router();
 
 router.get("/", getHomePage);
