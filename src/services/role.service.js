@@ -1,34 +1,35 @@
 import db from "../models/index";
-class UserService {
-  static getAll = async () => {
+class RoleService {
+  static getRoles = async () => {
     try {
-      let users = await db.User.findAll({
-        attributes: ["id", "username", "email", "phone", "sex"],
-        include: {
-          model: db.Role,
-          attributes: ["name", "description"],
-        },
+      let roles = await db.Role.findAll({
+        attributes: ["id", "name", "description"],
+        // include: {
+        //   model: db.Permission,
+        //   attributes: ["url", "description"],
+        // },
+        order: [["name", "ASC"]],
         raw: true,
         nest: true,
       });
 
-      if (users && users.length > 0) {
+      if (roles && roles.length > 0) {
         return {
-          EM: "get list users",
+          EM: "get list roles",
           EC: 1,
-          DT: users,
+          DT: roles,
         };
       } else {
         return {
-          EM: "get list users",
-          EC: 1,
+          EM: "No roles found",
+          EC: 0,
           DT: [],
         };
       }
     } catch (error) {
       console.log(error);
       return {
-        EM: "Error from get user service",
+        EM: "Error from get role service",
         EC: -1,
         DT: "",
       };
@@ -145,4 +146,4 @@ class UserService {
   };
 }
 
-module.exports = UserService;
+module.exports = RoleService;

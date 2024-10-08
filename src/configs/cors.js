@@ -1,28 +1,33 @@
 require("dotenv").config();
-const configCors = (app) => {
-  //config CORS
-  // Add headers before the routes are defined
-  app.use(function (req, res, next) {
-    // Website you wish to allow to connect
-    res.setHeader("Access-Control-Allow-Origin", process.env.REACT_PATH);
 
-    // Request methods you wish to allow
+const configCors = (app) => {
+  // Handle CORS headers for preflight OPTIONS requests
+  app.options("*", (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", process.env.REACT_PATH);
     res.setHeader(
       "Access-Control-Allow-Methods",
       "GET, POST, OPTIONS, PUT, PATCH, DELETE"
     );
-
-    // Request headers you wish to allow
     res.setHeader(
       "Access-Control-Allow-Headers",
-      "X-Requested-With,content-type"
+      "X-Requested-With,content-type,Authorization"
     );
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
     res.setHeader("Access-Control-Allow-Credentials", true);
+    res.sendStatus(200); // Response for OPTIONS request
+  });
 
-    // Pass to next layer of middleware
+  // Middleware for all requests
+  app.use(function (req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", process.env.REACT_PATH);
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "X-Requested-With,content-type,Authorization"
+    );
+    res.setHeader("Access-Control-Allow-Credentials", true);
     next();
   });
 };

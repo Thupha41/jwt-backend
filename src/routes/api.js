@@ -5,17 +5,19 @@ import {
   handleLogin,
 } from "../controller/authController";
 import UserController from "../controller/userController";
+import RoleController from "../controller/roleController";
 const router = express.Router();
 
 const initApiRoute = (app) => {
   router.get("/test-api", testApi);
   router.post("/register", handleRegister);
   router.post("/login", handleLogin);
-  router.get("/user/read/?page=?&limit=?", UserController.getListUser);
-  router.get("/user/read", UserController.getListUser);
-  router.post("/user/create", UserController.createUser);
-  router.put("/user/update", UserController.updateUser);
-  router.delete("/user/delete", UserController.deleteUser);
+  router.get("/users/read/?page=?&limit=?", UserController.getListUser);
+  router.get("/users/read", UserController.getListUser);
+  router.get("/roles/read", RoleController.ReadFunc);
+  router.post("/users/create", UserController.createUser);
+  router.put("/users/update", UserController.updateUser);
+  router.delete("/users/delete/:id", UserController.deleteUser);
   return app.use("/api/v1", router);
 };
 
