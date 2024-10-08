@@ -28,10 +28,35 @@ const getListUser = async (req, res) => {
     });
   }
 };
-const createUser = async () => {
+const createUser = async (req, res) => {
   try {
+    const result = await UserService.create(req.body);
+    if (result.EC === 1) {
+      return res.status(201).json({
+        EM: result.EM,
+        EC: result.EC,
+        DT: [],
+      });
+    } else if (result.EC === 0) {
+      return res.status(409).json({
+        EM: result.EM,
+        EC: result.EC,
+        DT: result.DT,
+      });
+    } else {
+      return res.status(500).json({
+        EM: result.EM,
+        EC: result.EC,
+        DT: result.DT,
+      });
+    }
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      EM: "Something went wrong while creating the user.",
+      EC: -1,
+      DT: "",
+    });
   }
 };
 const deleteUser = async (req, res) => {
