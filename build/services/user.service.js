@@ -27,11 +27,13 @@ _defineProperty(UserService, "getAll", /*#__PURE__*/_asyncToGenerator(/*#__PURE_
           include: {
             model: _index["default"].Role,
             attributes: ["name", "description"]
-          }
+          },
+          raw: true,
+          nest: true
         });
       case 3:
         users = _context.sent;
-        if (!users) {
+        if (!(users && users.length > 0)) {
           _context.next = 8;
           break;
         }
@@ -54,9 +56,9 @@ _defineProperty(UserService, "getAll", /*#__PURE__*/_asyncToGenerator(/*#__PURE_
         _context.t0 = _context["catch"](0);
         console.log(_context.t0);
         return _context.abrupt("return", {
-          EM: "something wrong with get list user service",
-          EC: 1,
-          DT: data
+          EM: "Error from get user service",
+          EC: -1,
+          DT: ""
         });
       case 15:
       case "end":
@@ -64,31 +66,116 @@ _defineProperty(UserService, "getAll", /*#__PURE__*/_asyncToGenerator(/*#__PURE_
     }
   }, _callee, null, [[0, 11]]);
 })));
-_defineProperty(UserService, "create", /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-    while (1) switch (_context2.prev = _context2.next) {
-      case 0:
-      case "end":
-        return _context2.stop();
-    }
-  }, _callee2);
-})));
-_defineProperty(UserService, "update", /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-  return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-    while (1) switch (_context3.prev = _context3.next) {
-      case 0:
-      case "end":
-        return _context3.stop();
-    }
-  }, _callee3);
-})));
-_defineProperty(UserService, "delete", /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-  return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-    while (1) switch (_context4.prev = _context4.next) {
-      case 0:
-      case "end":
-        return _context4.stop();
-    }
-  }, _callee4);
-})));
+_defineProperty(UserService, "create", /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(data) {
+    var user;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return _index["default"].User.create({});
+        case 3:
+          user = _context2.sent;
+          _context2.next = 10;
+          break;
+        case 6:
+          _context2.prev = 6;
+          _context2.t0 = _context2["catch"](0);
+          console.log(_context2.t0);
+          return _context2.abrupt("return", {
+            EM: "Error from get user service",
+            EC: -1,
+            DT: ""
+          });
+        case 10:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[0, 6]]);
+  }));
+  return function (_x) {
+    return _ref2.apply(this, arguments);
+  };
+}());
+_defineProperty(UserService, "update", /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(data) {
+    var user;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return _index["default"].User.update({
+            where: {
+              id: data.id
+            }
+          });
+        case 3:
+          user = _context3.sent;
+          if (!user) {
+            _context3.next = 8;
+            break;
+          }
+          user.save();
+          _context3.next = 9;
+          break;
+        case 8:
+          return _context3.abrupt("return", {});
+        case 9:
+          _context3.next = 15;
+          break;
+        case 11:
+          _context3.prev = 11;
+          _context3.t0 = _context3["catch"](0);
+          console.log(_context3.t0);
+          return _context3.abrupt("return", {
+            EM: "Error from update user service",
+            EC: -1,
+            DT: ""
+          });
+        case 15:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[0, 11]]);
+  }));
+  return function (_x2) {
+    return _ref3.apply(this, arguments);
+  };
+}());
+_defineProperty(UserService, "delete", /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(id) {
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          _context4.next = 3;
+          return _index["default"].User["delete"]({
+            where: {
+              id: id
+            }
+          });
+        case 3:
+          _context4.next = 9;
+          break;
+        case 5:
+          _context4.prev = 5;
+          _context4.t0 = _context4["catch"](0);
+          console.log(_context4.t0);
+          return _context4.abrupt("return", {
+            EM: "Error from delete user service",
+            EC: -1,
+            DT: ""
+          });
+        case 9:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4, null, [[0, 5]]);
+  }));
+  return function (_x3) {
+    return _ref4.apply(this, arguments);
+  };
+}());
 module.exports = UserService;

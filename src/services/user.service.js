@@ -21,7 +21,7 @@ class UserService {
       } else {
         return {
           EM: "get list users",
-          EC: 0,
+          EC: 1,
           DT: [],
         };
       }
@@ -31,6 +31,35 @@ class UserService {
         EM: "Error from get user service",
         EC: -1,
         DT: "",
+      };
+    }
+  };
+
+  static getUserWithPagination = async (page, limit) => {
+    try {
+      let offset = (page - 1) * limit;
+      const { count, rows } = await db.User.findAndCountAll({
+        offset: offset,
+        limit: limit,
+      });
+      let totalPages = Math.ceil(count / limit);
+      let data = {
+        totalRows: count,
+        totalPages: totalPages,
+        users: rows,
+      };
+      console.log(">>> check data", data);
+      return {
+        EM: "Get list users with pagination",
+        EC: 1,
+        DT: data,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        EM: "Error from get user service",
+        EC: -1,
+        DT: [],
       };
     }
   };
@@ -71,7 +100,7 @@ class UserService {
   };
   static delete = async (id) => {
     try {
-      await db.User.delete({
+      await db.User.destroy({
         where: {
           id: id,
         },

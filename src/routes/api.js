@@ -11,6 +11,7 @@ const initApiRoute = (app) => {
   router.get("/test-api", testApi);
   router.post("/register", handleRegister);
   router.post("/login", handleLogin);
+  router.get("/user/read/?page=?&limit=?", UserController.getListUser);
   router.get("/user/read", UserController.getListUser);
   router.post("/user/create", UserController.createUser);
   router.put("/user/update", UserController.updateUser);
