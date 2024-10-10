@@ -25,9 +25,6 @@ const customizeConfig = {
   dialect: process.env.DB_DIALECT,
   host: process.env.DB_HOST,
   logging: false,
-  query: {
-    raw: true,
-  },
   timezone: "+07:00",
 };
 sequelize = new Sequelize(

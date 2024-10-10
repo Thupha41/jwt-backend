@@ -1,6 +1,9 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 import { Op } from "sequelize";
+import JWTService from "./JWT.service";
+import { createToken } from "../middleware/JWTAction";
+require("dotenv").config();
 // Configurable salt rounds
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS, 10) || 10;
 
@@ -16,33 +19,6 @@ const hashUserPassword = async (userPassword) => {
   }
 };
 
-// const checkEmailExisted = async (userEmail) => {
-//   const isEmailExisted = await db.User.findOne({
-//     where: {
-//       email: userEmail,
-//     },
-
-//     raw: true,
-//   });
-//   if (!isEmailExisted) {
-//     return false;
-//   }
-//   return true;
-// };
-
-// const checkPhoneExisted = async (userPhone) => {
-//   const isPhoneExisted = await db.User.findOne({
-//     where: {
-//       phone: userPhone,
-//     },
-
-//     raw: true,
-//   });
-//   if (!isPhoneExisted) {
-//     return false;
-//   }
-//   return true;
-// };
 // Function to check both email and phone at once
 const checkUserExists = async (userEmail, userPhone) => {
   const user = await db.User.findOne({
@@ -73,23 +49,6 @@ class AuthService {
         }
       }
 
-      //   let isEmailExist = await checkEmailExisted(rawUserData.email);
-      //   console.log(">>> check email", isEmailExist);
-      //   let isPhoneExist = await checkPhoneExisted(rawUserData.phone);
-
-      //   if (isEmailExist) {
-      //     return {
-      //       EM: "The email is already existed!",
-      //       EC: 1,
-      //     };
-      //   }
-      //   if (isPhoneExist) {
-      //     return {
-      //       EM: "The phone number is already existed!",
-      //       EC: 1,
-      //     };
-      //   }
-
       //Step 2: hash user password
       let hashPassword = await hashUserPassword(rawUserData.password);
 
@@ -99,6 +58,7 @@ class AuthService {
         username: rawUserData.username,
         phone: rawUserData.phone,
         password: hashPassword,
+        roleId: 4,
       });
       return {
         EM: "A user create successfully!",
@@ -120,13 +80,24 @@ class AuthService {
         rawUserData.valueLogin,
         rawUserData.valueLogin
       );
-      console.log(">>> check user", user);
+      console.log(">>> check user login", user);
       if (user) {
         let checkPw = checkPassword(rawUserData.password, user.password);
         if (checkPw) {
+          let roles = await JWTService.getRoleWithPermission(user);
+          let payload = {
+            email: user.email,
+            roles,
+            expiresIn: process.env.JWT_EXPIRES_IN,
+          };
+          let token = createToken(payload);
           return {
             EM: "Login successfully",
             EC: 1,
+            DT: {
+              accessToken: token,
+              roles,
+            },
           };
         }
       }
