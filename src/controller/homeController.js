@@ -20,9 +20,7 @@ const postCreateUser = async (req, res) => {
   return res.redirect("/user");
 };
 const handleDeleteUser = async (req, res) => {
-  console.log(">>> Check params", req.params);
   const userId = req.params.id;
-  console.log(">>> Check user id", userId);
   if (!userId) return;
   await deleteUser(userId);
   return res.redirect("/user");

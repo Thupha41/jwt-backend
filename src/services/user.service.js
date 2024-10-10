@@ -72,7 +72,7 @@ class UserService {
         totalPages: totalPages,
         users: rows,
       };
-      console.log(">>> check data", data);
+
       if (data.users && data.users.length > 0) {
         return {
           EM: `Get list users at page ${page}, limit ${limit}`,
@@ -150,9 +150,6 @@ class UserService {
       let user = await db.User.findOne({
         where: { id: data.id },
       });
-
-      console.log(">>> check user update", user);
-      console.log(">>> check data update", data);
 
       if (user) {
         // Update the user record using the where clause to specify which user to update

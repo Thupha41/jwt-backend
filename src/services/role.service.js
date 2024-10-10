@@ -56,7 +56,7 @@ class RoleService {
         totalPages: totalPages,
         users: rows,
       };
-      console.log(">>> check data", data);
+
       if (data.users && data.users.length > 0) {
         return {
           EM: `Get list users at page ${page}, limit ${limit}`,

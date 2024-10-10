@@ -39,7 +39,6 @@ class AuthService {
     try {
       // Step 1: Check email/phone number already existed
       let user = await checkUserExists(rawUserData.email, rawUserData.phone);
-      console.log(">>> check user", user);
       if (user) {
         if (user.email === rawUserData.email) {
           return { EM: "The email is already existed!", EC: 0 };
@@ -80,7 +79,6 @@ class AuthService {
         rawUserData.valueLogin,
         rawUserData.valueLogin
       );
-      console.log(">>> check user login", user);
       if (user) {
         let checkPw = checkPassword(rawUserData.password, user.password);
         if (checkPw) {

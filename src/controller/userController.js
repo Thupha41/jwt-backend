@@ -2,6 +2,7 @@ import UserService from "../services/user.service";
 
 const getListUser = async (req, res) => {
   try {
+    console.log("Cookies", req.cookies);
     if (req.query.page && req.query.limit) {
       let page = req.query.page;
       let limit = req.query.limit;

@@ -45,6 +45,7 @@ const handleRegister = async (req, res) => {
 const handleLogin = async (req, res) => {
   try {
     let data = await AuthService.login(req.body);
+    res.cookie("jwt", data.DT.accessToken, { httpOnly: true });
     if (data && +data.EC !== 1) {
       return res.status(401).json({
         EM: data.EM,
