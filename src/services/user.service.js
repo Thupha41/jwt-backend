@@ -1,6 +1,5 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
-import { Op } from "sequelize";
 // Configurable salt rounds
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS, 10) || 10;
 
@@ -15,15 +14,6 @@ const hashUserPassword = async (userPassword) => {
     throw error;
   }
 };
-const checkUserExists = async (userEmail, userPhone) => {
-  const user = await db.User.findOne({
-    where: {
-      [Op.or]: [{ email: userEmail }, { phone: userPhone }],
-    },
-    raw: true,
-  });
-  return user;
-};
 
 class UserService {
   static getAll = async () => {
@@ -32,7 +22,7 @@ class UserService {
         attributes: ["id", "username", "email", "phone", "sex"],
         include: {
           model: db.Role,
-          attributes: ["name", "description"],
+          attributes: ["name", "description", "id"],
         },
         raw: true,
         nest: true,
@@ -67,10 +57,11 @@ class UserService {
       const { count, rows } = await db.User.findAndCountAll({
         offset: offset,
         limit: limit,
-        attributes: ["id", "username", "email", "phone", "sex"],
+        attributes: ["id", "username", "email", "phone", "sex", "address"],
+        order: [["id", "DESC"]],
         include: {
           model: db.Role,
-          attributes: ["name", "description"],
+          attributes: ["name", "description", "id"],
         },
         raw: true,
         nest: true,
@@ -107,20 +98,31 @@ class UserService {
   static create = async (data) => {
     try {
       // Step 1: Check email/phone number already existed
-      let user = await checkUserExists(data.email, data.phone);
-      console.log(">>> check user", user);
-      if (user) {
-        if (user.email === data.email) {
-          return { EM: "The email is already existed!", EC: 0 };
-        } else if (user.phone === data.phone) {
-          return { EM: "The phone number is already existed!", EC: 0 };
-        }
+      let userByEmail = await db.User.findOne({
+        where: { email: data.email },
+        raw: true,
+      });
+
+      if (userByEmail) {
+        return { EM: "The email is already existed!", EC: 0, DT: "email" };
       }
+      let userByPhone = await db.User.findOne({
+        where: { phone: data.phone },
+        raw: true,
+      });
+
+      if (userByPhone) {
+        return {
+          EM: "The phone number is already existed!",
+          EC: 0,
+          DT: "phone",
+        };
+      }
+
       //Step 2: hash user password
       let hashPassword = await hashUserPassword(data.password);
-      data.password = hashPassword;
       //Step 3: create new user
-      await db.User.create(data);
+      await db.User.create({ ...data, password: hashPassword });
       return {
         EM: "User created successfully.",
         EC: 1,
@@ -136,17 +138,47 @@ class UserService {
   };
   static update = async (data) => {
     try {
-      let user = await db.User.update({
-        where: {
-          id: data.id,
-        },
+      if (!data.roleId) {
+        return {
+          EC: 0,
+          EM: "Error with empty role",
+          DT: "role",
+        };
+      }
+
+      // Find user by ID
+      let user = await db.User.findOne({
+        where: { id: data.id },
       });
 
+      console.log(">>> check user update", user);
+      console.log(">>> check data update", data);
+
       if (user) {
-        user.save();
+        // Update the user record using the where clause to specify which user to update
+        await db.User.update(
+          {
+            username: data.username,
+            sex: data.sex,
+            address: data.address,
+            roleId: data.roleId,
+          },
+          {
+            where: { id: data.id },
+          }
+        );
+
+        return {
+          EM: "Update user successfully",
+          EC: 1,
+          DT: [],
+        };
       } else {
-        //not found
-        return {};
+        return {
+          EM: "Failed to update user - user not found",
+          EC: 0,
+          DT: [],
+        };
       }
     } catch (error) {
       console.log(error);

@@ -84,13 +84,45 @@ const deleteUser = async (req, res) => {
     });
   }
 };
-const updateUser = async () => {
+const updateUser = async (req, res) => {
   try {
+    const { id } = req.params;
+
+    const data = {
+      id,
+      ...req.body,
+    };
+
+    let response = await UserService.update(data);
+
+    if (response && response.EC === 0) {
+      return res.status(404).json({
+        EM: response.EM,
+        EC: response.EC,
+        DT: response.DT,
+      });
+    } else if (response && +response.EC === -1) {
+      return res.status(500).json({
+        EM: response.EM,
+        EC: response.EC,
+        DT: response.DT,
+      });
+    }
+
+    return res.status(200).json({
+      EM: response.EM,
+      EC: response.EC,
+      DT: response.DT,
+    });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      EM: "Error message from server",
+      EC: -1,
+      DT: "",
+    });
   }
 };
-
 module.exports = {
   getListUser,
   createUser,
