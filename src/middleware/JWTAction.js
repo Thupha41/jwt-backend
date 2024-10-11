@@ -14,18 +14,75 @@ const createToken = (payload) => {
 };
 
 const verifyToken = (token) => {
-  let data = null;
-  jwt.verify(token, key, function (err, decoded) {
-    if (err) {
-      console.log(err);
-      return data;
+  let decoded = null;
+  try {
+    decoded = jwt.verify(token, key);
+  } catch (error) {
+    console.log(error);
+  }
+  return decoded;
+};
+
+const checkUserJWT = (req, res, next) => {
+  let cookies = req.cookies;
+  if (cookies && cookies.jwt) {
+    let token = cookies.jwt;
+    let decoded = verifyToken(token);
+    if (decoded) {
+      req.user = decoded;
+      next();
+    } else {
+      return res.status(401).json({
+        EC: -1,
+        EM: "User not authenticated",
+        DT: "",
+      });
     }
-    console.log(decoded);
-    return decoded;
-  });
+    console.log(">>> check cookies jwt", cookies.jwt);
+  } else {
+    return res.status(401).json({
+      EC: -1,
+      EM: "User not authenticated",
+      DT: "",
+    });
+  }
+};
+
+const checkUserPermission = (req, res, next) => {
+  if (req.user) {
+    let { email, roles } = req.user;
+    let currentUrl = req.path;
+    let canAccess = roles.Permissions.some((item) => item.url === currentUrl);
+
+    if (!roles.Permissions || roles.Permissions.length === 0) {
+      return res.status(403).json({
+        EC: -1,
+        EM: "You don't have permission to access this resource!",
+        DT: "",
+      });
+    }
+
+    if (canAccess) {
+      next();
+    } else {
+      return res.status(403).json({
+        EC: -1,
+        EM: "You don't have permission to access this resource!",
+        DT: "",
+      });
+    }
+  } else {
+    return res.status(401).json({
+      EC: -1,
+      EM: "User not authenticated",
+      DT: "",
+    });
+  }
 };
 
 module.exports = {
   createToken,
   verifyToken,
+  checkUserJWT,
+  checkUserPermission,
 };
