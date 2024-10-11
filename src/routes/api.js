@@ -19,6 +19,7 @@ const router = express.Router();
 const initApiRoute = (app) => {
   router.all("*", checkUserJWT, checkUserPermission);
   router.get("/test-api", testApi);
+  router.get("/account", UserController.getUserAccount);
   router.post("/register", handleRegister);
   router.post("/login", handleLogin);
   router.get("/users/read", UserController.getListUser);

@@ -84,10 +84,11 @@ class AuthService {
         if (checkPw) {
           let roles = await JWTService.getRoleWithPermission(user);
           let payload = {
-            email: user.email,
             roles,
-            expiresIn: process.env.JWT_EXPIRES_IN,
+            username: user.username,
+            email: user.email,
           };
+          console.log(">> check payload", payload);
           let token = createToken(payload);
           return {
             EM: "Login successfully",
@@ -95,6 +96,8 @@ class AuthService {
             DT: {
               accessToken: token,
               roles,
+              username: user.username,
+              email: user.email,
             },
           };
         }

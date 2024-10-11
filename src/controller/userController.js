@@ -123,9 +123,22 @@ const updateUser = async (req, res) => {
     });
   }
 };
+const getUserAccount = (req, res) => {
+  return res.status(200).json({
+    EM: "ok",
+    EC: 1,
+    DT: {
+      accessToken: req.token,
+      username: req.user.username,
+      email: req.user.email,
+      roleWithPermission: req.user.roles,
+    },
+  });
+};
 module.exports = {
   getListUser,
   createUser,
   deleteUser,
   updateUser,
+  getUserAccount,
 };
