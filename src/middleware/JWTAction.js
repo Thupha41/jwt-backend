@@ -6,7 +6,7 @@ const nonSecurePaths = ["/register", "/login"];
 const createToken = (payload) => {
   let token = null;
   try {
-    token = jwt.sign(payload, key);
+    token = jwt.sign(payload, key, { expiresIn: process.env.JWT_EXPIRES_IN });
   } catch (error) {
     console.log(error);
   }
@@ -17,7 +17,7 @@ const createToken = (payload) => {
 const verifyToken = (token) => {
   let decoded = null;
   try {
-    decoded = jwt.verify(token, key, { expiresIn: process.env.JWT_EXPIRES_IN });
+    decoded = jwt.verify(token, key);
   } catch (error) {
     console.log(error);
   }
