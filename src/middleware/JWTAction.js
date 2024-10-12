@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 require("dotenv").config();
 
 let key = process.env.JWT_SECRET;
-const nonSecurePaths = ["/register", "/login"];
+const nonSecurePaths = ["/logout", "/register", "/login"];
 const createToken = (payload) => {
   let token = null;
   try {
@@ -26,6 +26,8 @@ const verifyToken = (token) => {
 
 const checkUserJWT = (req, res, next) => {
   if (nonSecurePaths.includes(req.path)) return next();
+
+  //extract token from header
   const tokenFromHeader = extractToken(req);
   let cookies = req.cookies;
   if ((cookies && cookies.jwt) || tokenFromHeader) {
@@ -33,6 +35,7 @@ const checkUserJWT = (req, res, next) => {
     console.log(">>> check cookies", cookies);
     let decoded = verifyToken(token);
     if (decoded) {
+      console.log(">>> check decoded", decoded);
       req.user = decoded;
       req.token = token;
       next();

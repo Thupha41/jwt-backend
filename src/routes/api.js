@@ -3,6 +3,7 @@ import {
   testApi,
   handleRegister,
   handleLogin,
+  handleLogout,
 } from "../controller/authController";
 import UserController from "../controller/userController";
 import RoleController from "../controller/roleController";
@@ -22,6 +23,7 @@ const initApiRoute = (app) => {
   router.get("/account", UserController.getUserAccount);
   router.post("/register", handleRegister);
   router.post("/login", handleLogin);
+  router.post("/logout", handleLogout);
   router.get("/users/read", UserController.getListUser);
   router.get("/roles/read", RoleController.ReadFunc);
   router.post("/users/create", UserController.createUser);

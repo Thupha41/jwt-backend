@@ -1,5 +1,3 @@
-import { where } from "sequelize/lib/sequelize";
-import { sequelize } from "../configs/config.mysql";
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 

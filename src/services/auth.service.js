@@ -102,7 +102,7 @@ class AuthService {
           };
         }
       }
-      console.log(">>> Not found user with email/phone");
+
       return {
         EM: "Your email/phone or password is incorrect",
         EC: 0,
