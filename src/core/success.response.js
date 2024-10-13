@@ -3,47 +3,49 @@
 const { StatusCodes, ReasonPhrases } = require("../utils/httpStatusCode");
 
 class SuccessResponse {
-  constructor({
-    message,
-    statusCode = StatusCodes.OK,
-    reasonStatusCode = ReasonPhrases.OK,
-    data = {},
-  }) {
-    this.message = !message ? reasonStatusCode : message;
-    this.statusCode = statusCode;
-    this.data = data;
+  constructor({ EC, EM, DT }) {
+    this.EC = EC; // Error Code
+    this.EM = EM; // Error Message
+    this.DT = DT; // Data
   }
 
-  send(res, headers = {}) {
-    return res.status(this.statusCode).json(this);
+  send(res) {
+    return res.status(this.getStatusCode()).json(this);
+  }
+
+  getStatusCode() {
+    // Default to OK if not overridden
+    return StatusCodes.OK;
   }
 }
 
 class OK extends SuccessResponse {
-  constructor({ message, data = {} }) {
-    super({ message, data });
+  constructor({ EM = ReasonPhrases.OK, DT = {} }) {
+    super({ EC: 1, EM, DT });
+  }
+
+  getStatusCode() {
+    return StatusCodes.OK; // 200
   }
 }
 
 class CREATED extends SuccessResponse {
-  constructor({
-    message,
-    statusCode = StatusCodes.CREATED,
-    reasonStatusCode = ReasonPhrases.CREATED,
-    data,
-  }) {
-    super({ message, statusCode, reasonStatusCode, data });
+  constructor({ EM = ReasonPhrases.CREATED, DT = {} }) {
+    super({ EC: 1, EM, DT });
+  }
+
+  getStatusCode() {
+    return StatusCodes.CREATED;
   }
 }
 
 class NO_CONTENT extends SuccessResponse {
-  constructor({
-    message,
-    statusCode = StatusCodes.NO_CONTENT,
-    reasonStatusCode = ReasonPhrases.NO_CONTENT,
-    data,
-  }) {
-    super({ message, statusCode, reasonStatusCode, data });
+  constructor({ EM = ReasonPhrases.NO_CONTENT }) {
+    super({ EC: 1, EM, DT: null });
+  }
+
+  getStatusCode() {
+    return StatusCodes.NO_CONTENT;
   }
 }
 

@@ -3,58 +3,66 @@
 const { StatusCodes, ReasonPhrases } = require("../utils/httpStatusCode");
 
 class ErrorResponse extends Error {
-  constructor(message, status) {
-    super(message);
-    this.status = status;
+  constructor({ EM, DT = {} }) {
+    super(EM);
+    this.EC = -1; // Error Code
+    this.EM = EM; // Error Message
+    this.DT = DT; // Data
+  }
+
+  send(res) {
+    return res.status(this.getStatusCode()).json(this);
+  }
+
+  getStatusCode() {
+    return StatusCodes.INTERNAL_SERVER_ERROR; // Default status code is 500
   }
 }
 
-class ConflictRequestError extends ErrorResponse {
-  constructor(message = ReasonPhrases.CONFLICT, status = StatusCodes.CONFLICT) {
-    super(message, status);
+class BadRequestResponse extends ErrorResponse {
+  constructor({ EM = ReasonPhrases.BAD_REQUEST, DT = {} }) {
+    super({ EM, DT });
+  }
+
+  getStatusCode() {
+    return StatusCodes.BAD_REQUEST; // Status code for bad requests is 400
   }
 }
 
-class ForbiddenRequestError extends ErrorResponse {
-  constructor(
-    message = ReasonPhrases.FORBIDDEN,
-    status = StatusCodes.FORBIDDEN
-  ) {
-    super(message, status);
+class UnauthorizedResponse extends ErrorResponse {
+  constructor({ EM = ReasonPhrases.UNAUTHORIZED, DT = {} }) {
+    super({ EM, DT });
+  }
+
+  getStatusCode() {
+    return StatusCodes.UNAUTHORIZED; // Status code for unauthorized is 401
   }
 }
 
-class BadRequestError extends ErrorResponse {
-  constructor(
-    message = ReasonPhrases.BAD_REQUEST,
-    status = StatusCodes.BAD_REQUEST
-  ) {
-    super(message, status);
+class ForbiddenResponse extends ErrorResponse {
+  constructor({ EM = ReasonPhrases.FORBIDDEN, DT = {} }) {
+    super({ EM, DT });
+  }
+
+  getStatusCode() {
+    return StatusCodes.FORBIDDEN; // Status code for forbidden is 403
   }
 }
 
-class NotFoundError extends ErrorResponse {
-  constructor(
-    message = ReasonPhrases.NOT_FOUND,
-    status = StatusCodes.NOT_FOUND
-  ) {
-    super(message, status);
+class NotFoundResponse extends ErrorResponse {
+  constructor({ EM = ReasonPhrases.NOT_FOUND, DT = {} }) {
+    super({ EM, DT });
   }
-}
 
-class AuthFailureError extends ErrorResponse {
-  constructor(
-    message = ReasonPhrases.UNAUTHORIZED,
-    status = StatusCodes.UNAUTHORIZED
-  ) {
-    super(message, status);
+  getStatusCode() {
+    return StatusCodes.NOT_FOUND; // Status code for not found is 404
   }
 }
 
 module.exports = {
-  ConflictRequestError,
-  ForbiddenRequestError,
-  BadRequestError,
-  NotFoundError,
-  AuthFailureError,
+  ErrorResponse,
+  BadRequestResponse,
+  UnauthorizedResponse,
+  ForbiddenResponse,
+  NotFoundResponse,
 };
