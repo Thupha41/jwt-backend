@@ -2,7 +2,13 @@ import db from "../models/index";
 import bcrypt from "bcryptjs";
 // Configurable salt rounds
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS, 10) || 10;
-
+const {
+  ConflictRequestError,
+  UnauthorizedResponse,
+  ForbiddenRequestError,
+  BadRequestError,
+  ErrorResponse,
+} = require("../core/error.response");
 // Hashes the password asynchronously
 const hashUserPassword = async (userPassword) => {
   try {
@@ -43,11 +49,9 @@ class UserService {
       }
     } catch (error) {
       console.log(error);
-      return {
-        EM: "Error from get user service",
-        EC: -1,
-        DT: "",
-      };
+      throw new ErrorResponse({
+        EM: "Something wrong with permission service!",
+      });
     }
   };
 
@@ -88,11 +92,9 @@ class UserService {
       }
     } catch (error) {
       console.log(error);
-      return {
-        EM: "Error from get user service",
-        EC: -1,
-        DT: [],
-      };
+      throw new ErrorResponse({
+        EM: "Something wrong with get user service!",
+      });
     }
   };
   static create = async (data) => {

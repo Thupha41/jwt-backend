@@ -48,16 +48,18 @@ class AuthService {
       let user = await checkUserExists(rawUserData.email, rawUserData.phone);
       if (user) {
         if (user.email === rawUserData.email) {
-          throw new BadRequestError({
+          return {
+            EC: -1,
             EM: "The email is already existed!",
             DT: "email",
-          });
+          };
         }
         if (user.phone === rawUserData.phone) {
-          throw new BadRequestError({
+          return {
+            EC: -1,
             EM: "The phone number is already existed!",
             DT: "phone",
-          });
+          };
         }
       }
 

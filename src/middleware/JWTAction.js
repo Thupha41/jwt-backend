@@ -64,21 +64,33 @@ const extractToken = (req) => {
   return null;
 };
 const checkUserPermission = (req, res, next) => {
-  if (nonSecurePaths.includes(req.path) || req.path === "/account")
+  if (nonSecurePaths.includes(req.path) || req.path === "/account") {
     return next();
+  }
 
   if (req.user) {
-    let { email, roles } = req.user;
-    let currentUrl = req.path;
-    let canAccess = roles.Permissions.some((item) => item.url === currentUrl);
+    const { roles } = req.user;
+    const currentPath = req.path;
+    console.log("Current Path:", currentPath);
 
     if (!roles.Permissions || roles.Permissions.length === 0) {
       return res.status(403).json({
         EC: -1,
-        EM: "You don't have permission to access this resource!",
+        EM: "You don't have any permissions assigned!",
         DT: "",
       });
     }
+
+    const canAccess = roles.Permissions.some((permission) => {
+      const permissionPath = permission.url.toLowerCase();
+      console.log("Comparing with:", permissionPath);
+
+      // Remove the ID from the current path for comparison
+      const currentPathWithoutId = currentPath.replace(/\/\d+$/, "");
+      console.log("Current Path Without ID:", currentPathWithoutId);
+
+      return currentPathWithoutId.toLowerCase().startsWith(permissionPath);
+    });
 
     if (canAccess) {
       next();
